@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 /**
  * Bean para uma Empresa.
- * 
+ * Beans são classes que apenas possuem variáveis, construtora e metodos get/set;
  * @author henrique
  */
 public class Empresa implements Serializable {

@@ -12,8 +12,8 @@ import net.rmi.beans.Empresa;
 import net.rmi.beans.Operacao;
 
 /**
- *
- * @author henrique
+ * Interface para o cliente JRMI
+ * @author Henriques
  */
 public interface ClientInterface extends Remote{
 

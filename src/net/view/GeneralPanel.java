@@ -19,7 +19,7 @@ import net.rmi.beans.Empresa;
 
 /**
  * Classe da janela de apresentação.
- * 
+ *
  * @author henrique
  */
 public class GeneralPanel extends JPanel {
@@ -34,13 +34,13 @@ public class GeneralPanel extends JPanel {
 
     /**
      * Construtora da classe.
-     * 
+     *
      * @param mainF janela do cliente.
      */
     public GeneralPanel(MainFrame mainF) {
         super(new BorderLayout());
         this.frame = mainF;
-        
+
         acoes = new JTable(new DefaultTableModel(new Object[0][0], tableHeader));
 
         update = new JButton("recarregar");
@@ -62,19 +62,19 @@ public class GeneralPanel extends JPanel {
                 }
             }
         });
-        
+
         this.add(new JScrollPane(acoes));
-        
+
         JPanel axPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         axPanel.add(update);
-        
+
         this.add(axPanel, BorderLayout.NORTH);
-        
+
         axPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         axPanel.add(listenTo);
-        
+
         this.add(axPanel, BorderLayout.SOUTH);
-        
+
         refresh();
     }
 
@@ -106,8 +106,10 @@ public class GeneralPanel extends JPanel {
      * Método adiciona uma empresa para ser observada.
      */
     void addMonitor() {
-        Empresa empresa = new Empresa(acoes.getValueAt(acoes.getSelectedRow(), 0).toString()).setName(acoes.getValueAt(acoes.getSelectedRow(), 1).toString());
+        if (acoes.getSelectedRow() > -1) {
+            Empresa empresa = new Empresa(acoes.getValueAt(acoes.getSelectedRow(), 0).toString()).setName(acoes.getValueAt(acoes.getSelectedRow(), 1).toString());
 
-        frame.addMonitor(empresa);
+            frame.addMonitor(empresa);
+        }
     }
 }

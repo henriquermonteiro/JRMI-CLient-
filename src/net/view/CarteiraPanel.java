@@ -9,6 +9,7 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Calendar;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
@@ -19,6 +20,9 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.table.DefaultTableModel;
 import net.rmi.beans.Empresa;
 import net.rmi.beans.Operacao;
+import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
+import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
+import net.sourceforge.jdatepicker.impl.UtilCalendarModel;
 
 /**
  * Classe da janela de operações.
@@ -35,6 +39,7 @@ public class CarteiraPanel extends JPanel {
     private JTable monitored;
     private final String[] tableHeader = new String[]{"ID", "Nome", "Valor Unitário"};
     private final MainFrame frame;
+    private JDatePickerImpl datePicker;
 
     /**
      * Construtora da classe.
@@ -47,14 +52,12 @@ public class CarteiraPanel extends JPanel {
 
         monitored = new JTable(new DefaultTableModel(new Object[0][0], tableHeader));
 
-        quantity = new JSpinner(new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 1));
-        quantity.setSize(70, (int) quantity.getSize().getHeight());
-        price = new JSpinner(new SpinnerNumberModel(0, 0, Float.MAX_VALUE, 0.1));
-        price.setSize(70, (int) price.getSize().getHeight());
-        price.setMaximumSize(price.getSize());
+        quantity = new JSpinner(new SpinnerNumberModel(0, 0, 1000000000, 1));
+        price = new JSpinner(new SpinnerNumberModel(0, 0, 1000000, 0.1));
         operationID = new JComboBox<>();
         tipo = new JComboBox<String>(new String[]{"Comprar", "Vender"});
         addOperation = new JButton("registrar");
+        datePicker = new JDatePickerImpl(new JDatePanelImpl(new UtilCalendarModel(Calendar.getInstance())));
 
         addOperation.addMouseListener(new MouseAdapter() {
             @Override
@@ -70,8 +73,9 @@ public class CarteiraPanel extends JPanel {
         axPanel.add(tipo);
         axPanel.add(price);
         axPanel.add(quantity);
+        axPanel.add(datePicker);
         axPanel.add(addOperation);
-
+        
         this.add(axPanel, BorderLayout.SOUTH);
     }
 
@@ -79,7 +83,7 @@ public class CarteiraPanel extends JPanel {
      * Método captura uma operação feita na janela.
      */
     void register() {
-        Operacao operacao = new Operacao(getType(), operationID.getSelectedItem().toString(), frame.getClient()).setPreçoUnitarioDesejado((int) (((Double) price.getValue()) * 100)).setQuantidade(((Integer) quantity.getValue()));
+        Operacao operacao = new Operacao(getType(), operationID.getSelectedItem().toString(), (Calendar) datePicker.getModel().getValue(), frame.getClient()).setPreçoUnitarioDesejado((int) (((Double) price.getValue()) * 100)).setQuantidade(((Integer) quantity.getValue()));
 
         frame.registerOperation(operacao);
     }

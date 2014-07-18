@@ -13,8 +13,8 @@ import net.rmi.beans.Empresa;
 import net.rmi.beans.Operacao;
 
 /**
- *
- * @author henrique
+ * Interface para o servidor JRMI.
+ * @author Henriques
  */
 public interface ServerInterface extends Remote{
     public final static String SERVER_NAME = "Bolsa de Valores";
