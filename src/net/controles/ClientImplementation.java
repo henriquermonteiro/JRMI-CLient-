@@ -14,7 +14,6 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 import net.rmi.beans.Empresa;
 import net.rmi.beans.Operacao;
 import net.rmi.interfaces.ClientInterface;
@@ -22,13 +21,20 @@ import net.rmi.interfaces.ServerInterface;
 import net.view.MainFrame;
 
 /**
- *
+ * Classe principal de um Cliente.
+ * 
  * @author henrique
  */
-public class ClientImplementation extends UnicastRemoteObject implements ClientInterface{
+public class ClientImplementation extends UnicastRemoteObject implements ClientInterface {
+    
     private Controller controller;
     private MainFrame window;
     
+    /**
+     * Construtora da classe.
+     * 
+     * @throws RemoteException 
+     */
     public ClientImplementation() throws RemoteException {
         try {
             Registry reg = LocateRegistry.getRegistry("127.0.0.1");
@@ -37,6 +43,7 @@ public class ClientImplementation extends UnicastRemoteObject implements ClientI
             
             controller = new Controller(server, this);
             window = new MainFrame(controller);
+            
         } catch (NotBoundException ex) {
             Logger.getLogger(ClientImplementation.class.getName()).log(Level.SEVERE, null, ex);
         } catch (AccessException ex) {
@@ -44,26 +51,41 @@ public class ClientImplementation extends UnicastRemoteObject implements ClientI
         }
     }
 
+    /**
+     * Método para notificar o cliente sobre uma operação realizada com as ações de um empresa.
+     * 
+     * @param operacao compra ou venda efetuada por este cliente.
+     * @throws RemoteException 
+     */
     @Override
     public void notifyCompletedOperation(Operacao operacao) throws RemoteException {
         window.notifyOperation(operacao, controller.getCompanyFor(operacao.getCompanyID()));
     }
 
+    /**
+     * Método que recebe notificação de atualização de valores.
+     * 
+     * @param empresaAtualizado valor da ação de uma empresa que foi atualizada.
+     * @throws RemoteException 
+     */
     @Override
     public void notifyUpdate(Empresa empresaAtualizado) throws RemoteException {
         int oldValue = controller.receiveUpdate(empresaAtualizado);
         
-        if(oldValue != 0){
+        if (oldValue != 0) {
             window.notifyUpdate(empresaAtualizado, oldValue);
         }
     }
     
+    /**
+     * Método Main da implementação Cliente.
+     * 
+     * @param args 
+     */
     public static void main(String ... args){
-        
-//        JOptionPane.showMessageDialog(null, "Bla", "Titulo", JOptionPane.PLAIN_MESSAGE);
-        
         try {
             new ClientImplementation();
+            
         } catch (RemoteException ex) {
             Logger.getLogger(ClientImplementation.class.getName()).log(Level.SEVERE, null, ex);
         }

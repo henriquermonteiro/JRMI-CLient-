@@ -16,9 +16,10 @@ import net.rmi.beans.Operacao;
  * @author henrique
  */
 public interface ClientInterface extends Remote{
-    //recebe notificação de operação concluída
+
+    //Recebe notificação de operação realizada.
     public void notifyCompletedOperation(Operacao operacao) throws RemoteException ;
     
-    //recebe notificação de atualização de valores
+    //Recebe notificação de atualização dos valores da ação de uma empresa.
     public void notifyUpdate(Empresa empresaAtualizado) throws RemoteException ;
 }

@@ -8,10 +8,8 @@ package net.view;
 
 import java.awt.BorderLayout;
 import java.util.ArrayList;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import net.controles.Controller;
 import net.rmi.beans.Empresa;
@@ -19,15 +17,22 @@ import net.rmi.beans.Operacao;
 import net.rmi.interfaces.ClientInterface;
 
 /**
- *
+ * Classe da janela de um cliente.
+ * 
  * @author henrique
  */
-public class MainFrame extends JFrame{
+public class MainFrame extends JFrame {
+    
     private TopPanel topPanel;
     private CarteiraPanel carteira;
     private GeneralPanel general;
     private Controller controller; 
             
+    /**
+     * Construtora da classe.
+     * 
+     * @param cont controle de um cliente.
+     */
     public MainFrame(Controller cont) {
         super("Aplicações da Bolsa");
         controller = cont;
@@ -50,12 +55,19 @@ public class MainFrame extends JFrame{
         this.setVisible(true);
     }
     
-    public void notifyOperation(Operacao operacao, Empresa emp){
+    /**
+     * Mensagem de operação realizada.
+     * 
+     * @param operacao compra ou venda.
+     * @param emp empresa em que foram realizadas transações com as suas ações.
+     */    
+    public void notifyOperation(Operacao operacao, Empresa emp) {
+        
         String info, title, auxOpType;
         
-        if(operacao.isCompra()){
+        if (operacao.isCompra()) {
             auxOpType = "compra";
-        }else{
+        } else {
             auxOpType = "venda";
         }
         
@@ -66,16 +78,24 @@ public class MainFrame extends JFrame{
                 + (operacao.getPreçoUnitarioDesejado() /100.0) + ", totalizando R$ "
                 + ((operacao.getQuantidade() * operacao.getPreçoUnitarioDesejado()) / 100.0) + ".</html>";
         
-//        System.out.println(info);
-        
-//        JOptionPane.showMessageDialog(null, info);
         showMessage(title, info);
     }
     
+    /**
+     * Retorna a interface de um cliente.
+     * 
+     * @return interface.
+     */
     ClientInterface getClient(){
         return controller.getClient();
     }
     
+    /**
+     * Método que cria o popup.
+     * 
+     * @param title título da mensagem.
+     * @param info informação da mensagem.
+     */
     void showMessage(String title, String info){
         JFrame f = new JFrame(title);
         
@@ -90,20 +110,42 @@ public class MainFrame extends JFrame{
         f.setVisible(true);
     }
     
-    public void notifyUpdate(Empresa empresaAtual, Integer oldValue){
+    /**
+     * Método que apresenta a mudança do preço de uma ação.
+     * 
+     * @param empresaAtual empresa atualizada.
+     * @param oldValue valor antigo.
+     */
+    public void notifyUpdate(Empresa empresaAtual, Integer oldValue) {
+        
         topPanel.update(empresaAtual, oldValue);
         carteira.repaint();
     }
     
+    /**
+     * Método atualiza a lista de empresas.
+     * 
+     * @return lista de empresas.
+     */
     ArrayList<Empresa> refresh(){
         return controller.getListaEmpresas();
     }
     
+    /**
+     * Método para monitorar as ações de uma empresa.
+     * 
+     * @param emp empresa de interesse do cliente.
+     */
     void addMonitor(Empresa emp){
         controller.addCompanyListener(emp);
         carteira.addMonitoredCompany(emp);
     }
     
+    /**
+     * Método de registro de uma operação.
+     * 
+     * @param ope operação de compra ou venda.
+     */
     void registerOperation(Operacao ope){
         controller.registerOperation(ope);
     }

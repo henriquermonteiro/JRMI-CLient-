@@ -18,20 +18,30 @@ import javax.swing.JPanel;
 import net.rmi.beans.Empresa;
 
 /**
- *
+ * Classe
+ * 
  * @author henrique
  */
 public class TopPanel extends JPanel {
 
     private JLabel message;
 
+    /**
+     * Construtora da classe.
+     */
     public TopPanel() {
         super(new FlowLayout(FlowLayout.CENTER, 10, 10));
         message = new JLabel("Teste");
         this.add(message);
     }
     
-    void update(Empresa emp, Integer oldV){
+    /**
+     * Método para apresentar a porcentagem que um valor oscilou.
+     * 
+     * @param emp empresa.
+     * @param oldV valor antigo.
+     */
+    void update(Empresa emp, Integer oldV) {
         Integer modify = emp.getValue() - oldV;
         message.setIcon(getIcon(modify));
         
@@ -39,6 +49,12 @@ public class TopPanel extends JPanel {
         message.setText(emp.getName() + " " + new DecimalFormat("##0,00 %").format(porc));
     }
 
+    /**
+     * Método para o uso de ícones que mostram quanto subiu, ou desceu, o valor de uma ação.
+     * 
+     * @param modify valor alterado.
+     * @return imagem com seta para cima, ou para baixo.
+     */
     private Icon getIcon(Integer modify) {
         BufferedImage image = new BufferedImage(20, 20, BufferedImage.TYPE_3BYTE_BGR);
         Graphics2D g2d = image.createGraphics();

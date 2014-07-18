@@ -9,10 +9,12 @@ package net.rmi.beans;
 import java.io.Serializable;
 
 /**
- *
+ * Bean para uma Empresa.
+ * 
  * @author henrique
  */
-public class Empresa implements Serializable{
+public class Empresa implements Serializable {
+    
     private String name;
     private final String ID; //Chave para referencia
     private Integer value; //Valor em centavos (100 -> 1 R$)

@@ -18,7 +18,8 @@ import javax.swing.table.DefaultTableModel;
 import net.rmi.beans.Empresa;
 
 /**
- *
+ * Classe da janela de apresentação.
+ * 
  * @author henrique
  */
 public class GeneralPanel extends JPanel {
@@ -31,6 +32,11 @@ public class GeneralPanel extends JPanel {
 
     private final String[] tableHeader = new String[]{"ID", "Nome empresa", "Valor Ações"};
 
+    /**
+     * Construtora da classe.
+     * 
+     * @param mainF janela do cliente.
+     */
     public GeneralPanel(MainFrame mainF) {
         super(new BorderLayout());
         this.frame = mainF;
@@ -72,6 +78,9 @@ public class GeneralPanel extends JPanel {
         refresh();
     }
 
+    /**
+     * Método para atualizar a tabela de empresas.
+     */
     void refresh() {
         ArrayList<Empresa> empresas = frame.refresh();
 
@@ -93,6 +102,9 @@ public class GeneralPanel extends JPanel {
         listenTo.setEnabled(acoes.getRowCount() > 0);
     }
 
+    /**
+     * Método adiciona uma empresa para ser observada.
+     */
     void addMonitor() {
         Empresa empresa = new Empresa(acoes.getValueAt(acoes.getSelectedRow(), 0).toString()).setName(acoes.getValueAt(acoes.getSelectedRow(), 1).toString());
 

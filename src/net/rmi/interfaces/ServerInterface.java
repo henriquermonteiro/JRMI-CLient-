@@ -18,13 +18,14 @@ import net.rmi.beans.Operacao;
  */
 public interface ServerInterface extends Remote{
     public final static String SERVER_NAME = "Bolsa de Valores";
-    //Registrar interece
-    public boolean listenToCompany(Empresa empresa, ClientInterface client) throws RemoteException ;
-    
-    //Registrar operação(ões)
-    public boolean registerOperation(Operacao operacao) throws RemoteException ;
-    
-    //Informa Ações
-    public ArrayList<Empresa> getAllCompaniesStatus() throws RemoteException ;
+
+    //Metodo que registra um novo cliente que tem interesse em ações de uma determinada empresa.
+    public boolean listenToCompany(Empresa empresa, ClientInterface client) throws RemoteException;
+
+    //Registra uma nova operação de compra ou venda.
+    public boolean registerOperation(Operacao operacao) throws RemoteException;
+
+    //Retorna uma lista de todas as empresas cadastradas no servidor.
+    public ArrayList<Empresa> getAllCompaniesStatus() throws RemoteException;
     
 }

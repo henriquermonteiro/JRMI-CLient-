@@ -10,10 +10,12 @@ import java.io.Serializable;
 import net.rmi.interfaces.ClientInterface;
 
 /**
- *
+ * Bean para uma Operação.
+ * 
  * @author henrique
  */
-public class Operacao implements Serializable{
+public class Operacao implements Serializable {
+    
     private final boolean isCompra;
     private String companyID;
     private Integer quantidade;

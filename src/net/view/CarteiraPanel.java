@@ -6,7 +6,6 @@
 package net.view;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -22,7 +21,8 @@ import net.rmi.beans.Empresa;
 import net.rmi.beans.Operacao;
 
 /**
- *
+ * Classe da janela de operações.
+ * 
  * @author henrique
  */
 public class CarteiraPanel extends JPanel {
@@ -36,6 +36,11 @@ public class CarteiraPanel extends JPanel {
     private final String[] tableHeader = new String[]{"ID", "Nome", "Valor Unitário"};
     private final MainFrame frame;
 
+    /**
+     * Construtora da classe.
+     * 
+     * @param frame janela do cliente.
+     */
     public CarteiraPanel(MainFrame frame) {
         super(new BorderLayout());
         this.frame = frame;
@@ -70,18 +75,31 @@ public class CarteiraPanel extends JPanel {
         this.add(axPanel, BorderLayout.SOUTH);
     }
 
+    /**
+     * Método captura uma operação feita na janela.
+     */
     void register() {
         Operacao operacao = new Operacao(getType(), operationID.getSelectedItem().toString(), frame.getClient()).setPreçoUnitarioDesejado((int) (((Double) price.getValue()) * 100)).setQuantidade(((Integer) quantity.getValue()));
 
         frame.registerOperation(operacao);
     }
 
+    /**
+     * Método que adiciona uma empresa na tabela de monitoramento.
+     * 
+     * @param emp empresa desejada.
+     */
     void addMonitoredCompany(Empresa emp) {
         operationID.addItem(emp.getID());
 
         ((DefaultTableModel) monitored.getModel()).addRow(new Object[]{emp.getID(), emp.getName(), emp});
     }
 
+    /**
+     * Método retorna o tipo de uma operação.
+     * 
+     * @return true se for "Comprar", false caso contrário.
+     */
     private boolean getType() {
         switch (tipo.getSelectedItem().toString()) {
             case "Comprar":
