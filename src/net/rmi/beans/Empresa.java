@@ -38,7 +38,7 @@ public class Empresa implements Serializable {
     }
 
     public Integer getValue() {
-        return value;
+        return Math.abs(value);
     }
 
     public Empresa setValue(Integer value) {
