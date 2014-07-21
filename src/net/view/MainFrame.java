@@ -79,6 +79,8 @@ public class MainFrame extends JFrame {
                 + ((operacao.getQuantidade() * operacao.getPreçoUnitarioDesejado()) / 100.0) + ".</html>";
         
         showMessage(title, info);
+        
+        carteira.repaint();
     }
     
     /**
@@ -136,9 +138,8 @@ public class MainFrame extends JFrame {
      * 
      * @param emp empresa de interesse do cliente.
      */
-    void addMonitor(Empresa emp){
-        controller.addCompanyListener(emp);
-        carteira.addMonitoredCompany(emp);
+    public void addMonitor(Empresa emp){
+        carteira.addMonitoredCompany(controller.addCompanyListener(emp));
     }
     
     /**
@@ -148,5 +149,9 @@ public class MainFrame extends JFrame {
      */
     void registerOperation(Operacao ope){
         controller.registerOperation(ope);
+    }
+    
+    boolean validateOperation(Operacao ope){
+        return controller.validateOperation(ope);
     }
 }

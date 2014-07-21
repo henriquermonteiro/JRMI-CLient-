@@ -18,6 +18,7 @@ import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.table.DefaultTableModel;
+import net.controles.EstoqueAcao;
 import net.rmi.beans.Empresa;
 import net.rmi.beans.Operacao;
 import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
@@ -26,7 +27,7 @@ import net.sourceforge.jdatepicker.impl.UtilCalendarModel;
 
 /**
  * Classe da janela de operações.
- * 
+ *
  * @author henrique
  */
 public class CarteiraPanel extends JPanel {
@@ -37,13 +38,13 @@ public class CarteiraPanel extends JPanel {
     private JComboBox<String> operationID;
     private JComboBox<String> tipo;
     private JTable monitored;
-    private final String[] tableHeader = new String[]{"ID", "Nome", "Valor Unitário"};
+    private final String[] tableHeader = new String[]{"ID", "Nome", "Valor Unitário", "Quantidade em posse"};
     private final MainFrame frame;
     private JDatePickerImpl datePicker;
 
     /**
      * Construtora da classe.
-     * 
+     *
      * @param frame janela do cliente.
      */
     public CarteiraPanel(MainFrame frame) {
@@ -75,7 +76,7 @@ public class CarteiraPanel extends JPanel {
         axPanel.add(quantity);
         axPanel.add(datePicker);
         axPanel.add(addOperation);
-        
+
         this.add(axPanel, BorderLayout.SOUTH);
     }
 
@@ -85,23 +86,31 @@ public class CarteiraPanel extends JPanel {
     void register() {
         Operacao operacao = new Operacao(getType(), operationID.getSelectedItem().toString(), (Calendar) datePicker.getModel().getValue(), frame.getClient()).setPreçoUnitarioDesejado((int) (((Double) price.getValue()) * 100)).setQuantidade(((Integer) quantity.getValue()));
 
-        frame.registerOperation(operacao);
+        if (frame.validateOperation(operacao)) {
+            frame.registerOperation(operacao);
+        }else{
+            frame.showMessage("Erro ao criar operação.", "<html>A operação não pode ser criada.</br>Possíveis causas incluem montante insuficiente de ações para venda.</html>");
+        }
     }
 
     /**
      * Método que adiciona uma empresa na tabela de monitoramento.
-     * 
+     *
      * @param emp empresa desejada.
      */
-    void addMonitoredCompany(Empresa emp) {
+    void addMonitoredCompany(EstoqueAcao estoque) {
+        Empresa emp = estoque.getEmpresa();
+        
+        
+        
         operationID.addItem(emp.getID());
 
-        ((DefaultTableModel) monitored.getModel()).addRow(new Object[]{emp.getID(), emp.getName(), emp});
+        ((DefaultTableModel) monitored.getModel()).addRow(new Object[]{emp.getID(), emp.getName(), emp, estoque.getQuantidade_Mutable()});
     }
 
     /**
      * Método retorna o tipo de uma operação.
-     * 
+     *
      * @return true se for "Comprar", false caso contrário.
      */
     private boolean getType() {

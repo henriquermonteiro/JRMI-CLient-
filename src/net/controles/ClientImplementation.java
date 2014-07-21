@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package net.controles;
 
 import java.rmi.AccessException;
@@ -22,28 +21,33 @@ import net.view.MainFrame;
 
 /**
  * Classe principal de um Cliente.
- * 
+ *
  * @author henrique
  */
 public class ClientImplementation extends UnicastRemoteObject implements ClientInterface {
-    
+
     private Controller controller;
     private MainFrame window;
-    
+
     /**
      * Construtora da classe.
-     * 
-     * @throws RemoteException 
+     *
+     * @throws RemoteException
      */
     public ClientImplementation() throws RemoteException {
         try {
             Registry reg = LocateRegistry.getRegistry("127.0.0.1");
-            
+
             ServerInterface server = (ServerInterface) reg.lookup(ServerInterface.SERVER_NAME);
-            
+
             controller = new Controller(server, this);
+            
+            controller.startSimulation();
+            
             window = new MainFrame(controller);
             
+            controller.loadSimulation(window);
+
         } catch (NotBoundException ex) {
             Logger.getLogger(ClientImplementation.class.getName()).log(Level.SEVERE, null, ex);
         } catch (AccessException ex) {
@@ -52,40 +56,46 @@ public class ClientImplementation extends UnicastRemoteObject implements ClientI
     }
 
     /**
-     * Método para notificar o cliente sobre uma operação realizada com as ações de um empresa.
-     * 
+     * Método para notificar o cliente sobre uma operação realizada com as ações
+     * de um empresa.
+     *
      * @param operacao compra ou venda efetuada por este cliente.
-     * @throws RemoteException 
+     * @throws RemoteException
      */
     @Override
-    public void notifyCompletedOperation(Operacao operacao) throws RemoteException {
-        window.notifyOperation(operacao, controller.getCompanyFor(operacao.getCompanyID()));
+    public boolean notifyCompletedOperation(Operacao operacao) throws RemoteException {
+        if (controller.receiveCompletedOperation(operacao)) {
+            window.notifyOperation(operacao, controller.getCompanyFor(operacao.getCompanyID()));
+            return true;
+        }
+        
+        return false;
     }
 
     /**
      * Método que recebe notificação de atualização de valores.
-     * 
+     *
      * @param empresaAtualizado valor da ação de uma empresa que foi atualizada.
-     * @throws RemoteException 
+     * @throws RemoteException
      */
     @Override
     public void notifyUpdate(Empresa empresaAtualizado) throws RemoteException {
         int oldValue = controller.receiveUpdate(empresaAtualizado);
-        
+
         if (oldValue != 0) {
             window.notifyUpdate(empresaAtualizado, oldValue);
         }
     }
-    
+
     /**
      * Método Main da implementação Cliente.
-     * 
-     * @param args 
+     *
+     * @param args
      */
-    public static void main(String ... args){
+    public static void main(String... args) {
         try {
             new ClientImplementation();
-            
+
         } catch (RemoteException ex) {
             Logger.getLogger(ClientImplementation.class.getName()).log(Level.SEVERE, null, ex);
         }

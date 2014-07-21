@@ -28,4 +28,7 @@ public interface ServerInterface extends Remote{
     //Retorna uma lista de todas as empresas cadastradas no servidor.
     public ArrayList<Empresa> getAllCompaniesStatus() throws RemoteException;
     
+    //Retorna os dados de uma empresa a partir de seu ID.
+    public Empresa getCompanyForID(String ID) throws RemoteException;
+    
 }
