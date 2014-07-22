@@ -160,10 +160,6 @@ public class Controller {
             }
 
             estoque.incrementQuantidade(operacao.getQuantidade() * (-1));
-
-            if (estoque.getQuantidade() < 1) {
-                empresas.remove(estoque.getEmpresa().getID());
-            }
         }
 
         return true;

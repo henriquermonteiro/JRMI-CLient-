@@ -64,6 +64,7 @@ public class ClientImplementation extends UnicastRemoteObject implements ClientI
      */
     @Override
     public boolean notifyCompletedOperation(Operacao operacao) throws RemoteException {
+        System.out.println("Operação recebida (concluída): " + operacao.getCompanyID() + ", "+operacao.getPreçoUnitarioDesejado() + ", " + operacao.getQuantidade());
         if (controller.receiveCompletedOperation(operacao)) {
             window.notifyOperation(operacao, controller.getCompanyFor(operacao.getCompanyID()));
             return true;
