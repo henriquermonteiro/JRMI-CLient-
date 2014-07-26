@@ -8,8 +8,6 @@ package net.controles;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import net.rmi.beans.Empresa;
 import net.rmi.beans.Operacao;
 import net.rmi.interfaces.ClientInterface;
@@ -190,10 +188,12 @@ public class Controller {
             for(int k = 0; k < quantidade; k++){
                 int random = (int) (Math.random() * empresas.size());
                 
+                addCompanyListener(empresas.get(random));
+                
                 EstoqueAcao estoque = new EstoqueAcao(empresas.get(random));
                 estoque.setQuantidade((int)(Math.random() * 9) + 1);
                 
-                this.empresas.put(estoque.getEmpresa().getID(), estoque);
+//                this.empresas.put(estoque.getEmpresa().getID(), estoque);
             }
         } catch (RemoteException ex) {
         }

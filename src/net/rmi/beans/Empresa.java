@@ -42,7 +42,7 @@ public class Empresa implements Serializable {
     }
 
     public Empresa setValue(Integer value) {
-        this.value = value;
+        this.value = Math.abs(value);
         
         return this;
     }
